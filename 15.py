@@ -83,10 +83,15 @@ class Tienda:
             return NotImplemented
         return len(self) == len(otra)
 
+    def __lt__(self,otra):
+        if not isinstance(otra, Tienda):
+            return NotImplemented
+        return len(self) < len(otra)
+
     def __format__(self, fmt):
         if fmt == "inventario":
-            nombres = ", ".join(p.nombre for p in self._productos)
-            return f"[{self.nombre}: {nombres if nombres else 'Vacía'}]"
+            items = ", ".join(p.nombre for p in self._productos)
+            return f"[{self.nombre}: {items if items else 'Vacía'}]"
         return str(self)
     
     def __add__(self, otra):
@@ -107,8 +112,11 @@ class Tienda:
     def agregar(self, producto):
         self._productos.append(producto)
         
-    def obtener(self, nombre):
+    def buscar(self, nombre):
         return next((l for l in self._productos if l.nombre == nombre), None)
+
+    def total(self):
+        return sum(l.precio * l.stock for l in self._productos)
 
 # ==========================================
 # BATERÍA DE PRUEBAS: CLASE TIENDA
